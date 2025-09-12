@@ -1,0 +1,201 @@
+name: 📱 Platform Support
+description: Request support for a new platform or report platform-specific issues
+title: "[Platform]: "
+labels: ["platform", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for platform-specific requests, compatibility issues, or new platform support.
+
+  - type: dropdown
+    id: request_type
+    attributes:
+      label: Request Type
+      description: What type of platform request is this?
+      options:
+        - New platform support
+        - Platform-specific bug
+        - Platform optimization
+        - Platform feature parity
+        - Platform compatibility issue
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Target Platform
+      description: Which platform is this request about?
+      options:
+        - Windows 10/11
+        - macOS (Intel)
+        - macOS (Apple Silicon)
+        - Linux (Ubuntu/Debian)
+        - Linux (Fedora/RHEL)
+        - Linux (Arch/Manjaro)
+        - Linux (Other distribution)
+        - iOS (iPhone)
+        - iOS (iPad)
+        - Android (Phone)
+        - Android (Tablet)
+        - Web Browser (Chrome/Edge)
+        - Web Browser (Firefox)
+        - Web Browser (Safari)
+        - Steam Deck
+        - Other (specify below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: platform_details
+    attributes:
+      label: Platform Details
+      description: Provide specific details about the platform
+      placeholder: |
+        - OS Version: [e.g., Windows 11 22H2, macOS 14.0, Ubuntu 22.04]
+        - Architecture: [e.g., x64, ARM64, ARM32]
+        - Device Model: [e.g., iPhone 15 Pro, Surface Pro 9, Steam Deck]
+        - Hardware Specs: [e.g., RAM, GPU, CPU]
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Detailed description of your request or issue
+      placeholder: |
+        For new platform support: Explain why this platform is important and what the use case is
+        For bugs: Describe the platform-specific behavior and how it differs from other platforms
+        For optimization: Explain the performance issues specific to this platform
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_status
+    attributes:
+      label: Current Status
+      description: What's the current state on this platform?
+      placeholder: |
+        - Does the app run at all? 
+        - What features work/don't work?
+        - Are there workarounds?
+        - Performance characteristics?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior
+      description: What should happen on this platform?
+      placeholder: |
+        - How should the app behave?
+        - What performance is expected?
+        - What features should be available?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this platform support?
+      options:
+        - Low (nice to have)
+        - Medium (would expand user base)
+        - High (important for adoption)
+        - Critical (blocking major use cases)
+    validations:
+      required: true
+
+  - type: textarea
+    id: user_base
+    attributes:
+      label: User Base Impact
+      description: How many users would benefit from this platform support?
+      placeholder: |
+        - Estimated number of potential users
+        - Specific communities or groups that would benefit
+        - Market research or user requests you're aware of
+    validations:
+      required: false
+
+  - type: textarea
+    id: technical_challenges
+    attributes:
+      label: Technical Challenges
+      description: What technical challenges might be involved?
+      placeholder: |
+        - Platform-specific APIs or limitations
+        - Performance constraints
+        - UI/UX considerations
+        - Distribution/packaging requirements
+    validations:
+      required: false
+
+  - type: textarea
+    id: similar_apps
+    attributes:
+      label: Similar Applications
+      description: Are there similar apps that work well on this platform?
+      placeholder: |
+        - App Name 1: How they handle similar functionality
+        - App Name 2: Their approach to platform-specific features
+        - Best practices from the platform ecosystem
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: requirements
+    attributes:
+      label: Platform Requirements
+      description: What platform-specific requirements should be considered?
+      options:
+        - label: Native look and feel
+        - label: Platform-specific gestures/interactions
+        - label: Integration with platform services
+        - label: Accessibility compliance
+        - label: Performance optimization
+        - label: App store compliance
+        - label: Security requirements
+        - label: Offline functionality
+
+  - type: textarea
+    id: testing
+    attributes:
+      label: Testing Availability
+      description: Can you help test on this platform?
+      placeholder: |
+        - Do you have access to test devices?
+        - Can you provide testing feedback?
+        - Are you familiar with platform-specific testing tools?
+    validations:
+      required: false
+
+  - type: textarea
+    id: contribution
+    attributes:
+      label: Development Contribution
+      description: Can you contribute to platform development?
+      placeholder: |
+        - Platform development experience
+        - Specific skills (UI frameworks, platform APIs, etc.)
+        - Time availability for contribution
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other relevant information
+      placeholder: |
+        - Links to platform documentation
+        - Community discussions
+        - Related issues or requests
+    validations:
+      required: false

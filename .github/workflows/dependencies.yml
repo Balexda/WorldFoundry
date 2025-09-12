@@ -1,0 +1,162 @@
+name: Dependencies
+
+on:
+  schedule:
+    # Run weekly on Mondays at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+jobs:
+  update-rust-dependencies:
+    name: Update Rust Dependencies
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Cache Rust dependencies
+      uses: Swatinem/rust-cache@v2
+      with:
+        workspaces: core
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          libfontconfig1-dev \
+          libfreetype6-dev \
+          libgl1-mesa-dev \
+          libglu1-mesa-dev \
+          libegl1-mesa-dev \
+          libxcb-composite0-dev \
+          libxcb-shape0-dev \
+          libxcb-xfixes0-dev
+
+    - name: Install cargo-edit
+      run: cargo install cargo-edit
+
+    - name: Update dependencies
+      working-directory: core
+      run: |
+        cargo upgrade --workspace
+        cargo update
+
+    - name: Test updated dependencies
+      working-directory: core
+      run: |
+        cargo check --all-features
+        cargo test --all-features
+        cargo clippy --all-features -- -D warnings
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: 'chore: update Rust dependencies'
+        title: 'chore: update Rust dependencies'
+        body: |
+          ## Automated Dependency Update
+          
+          This PR updates Rust dependencies to their latest compatible versions.
+          
+          ### Changes
+          - Updated all dependencies in `core/Cargo.toml`
+          - Ran tests to ensure compatibility
+          - Verified code quality with Clippy
+          
+          ### Testing
+          - ✅ All tests pass
+          - ✅ Code compiles without warnings
+          - ✅ Clippy checks pass
+          
+          This PR was automatically created by the dependency update workflow.
+        branch: update-dependencies
+        delete-branch: true
+        labels: |
+          dependencies
+          automated
+
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Cache Rust dependencies
+      uses: Swatinem/rust-cache@v2
+      with:
+        workspaces: core
+
+    - name: Install cargo-audit
+      run: cargo install cargo-audit
+
+    - name: Run security audit
+      working-directory: core
+      run: cargo audit --json > audit-results.json
+
+    - name: Upload audit results
+      uses: actions/upload-artifact@v3
+      with:
+        name: security-audit-results
+        path: core/audit-results.json
+
+    - name: Check for vulnerabilities
+      working-directory: core
+      run: |
+        if cargo audit --deny warnings; then
+          echo "✅ No security vulnerabilities found"
+        else
+          echo "❌ Security vulnerabilities detected"
+          echo "Please review the audit results and update dependencies"
+          exit 1
+        fi
+
+  license-check:
+    name: License Compliance
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Cache Rust dependencies
+      uses: Swatinem/rust-cache@v2
+      with:
+        workspaces: core
+
+    - name: Install cargo-license
+      run: cargo install cargo-license
+
+    - name: Check licenses
+      working-directory: core
+      run: |
+        echo "## Dependency Licenses" > licenses.md
+        echo "" >> licenses.md
+        cargo license --json | jq -r '.[] | "- **\(.name)** (\(.version)): \(.license // "Unknown")"' >> licenses.md
+        
+        # Check for problematic licenses
+        if cargo license --json | jq -r '.[].license' | grep -E "(GPL|AGPL|LGPL)" > /dev/null; then
+          echo "❌ Found copyleft licenses that may require attention"
+          cargo license --json | jq -r '.[] | select(.license | test("GPL|AGPL|LGPL")) | "- \(.name) (\(.version)): \(.license)"'
+          exit 1
+        else
+          echo "✅ All dependency licenses are compatible"
+        fi
+
+    - name: Upload license report
+      uses: actions/upload-artifact@v3
+      with:
+        name: license-report
+        path: core/licenses.md
