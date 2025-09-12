@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/Balexda/WorldFoundry/discussions
+    about: Ask questions, share ideas, and discuss World Foundry with the community
+  - name: 📚 Documentation
+    url: https://balexda.github.io/WorldFoundry/docs/
+    about: Read the official documentation and API reference
+  - name: 🏗️ Architecture Guide
+    url: https://github.com/Balexda/WorldFoundry/blob/main/docs/architecture/ARCHITECTURE.md
+    about: Learn about World Foundry's technical architecture and design decisions
+  - name: 🗺️ Azgaar Integration
+    url: https://github.com/Balexda/WorldFoundry/blob/main/docs/Proposal.md#azgaar-integration
+    about: Information about importing and working with Azgaar Fantasy Map Generator files
