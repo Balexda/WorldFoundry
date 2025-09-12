@@ -80,7 +80,7 @@ impl WorldRenderer {
     /// Initialize the renderer with given dimensions
     pub fn initialize(&mut self, width: i32, height: i32) -> Result<()> {
         let info = skia::ImageInfo::new_n32_premul((width, height), None);
-        let mut surface = skia::Surface::new_raster(&info, None, None)
+        let surface = skia::surfaces::raster(&info, None, None)
             .ok_or_else(|| crate::WorldFoundryError::Rendering("Failed to create surface".to_string()))?;
             
         self.surface = Some(surface);
@@ -107,7 +107,7 @@ impl WorldRenderer {
         
         for layer in &sorted_layers {
             if layer.visible {
-                self.render_layer(canvas, world_map, layer, config)?;
+                Self::render_layer(canvas, world_map, layer, config)?;
             }
         }
         
@@ -120,79 +120,79 @@ impl WorldRenderer {
             .ok_or_else(|| crate::WorldFoundryError::Rendering("Surface not initialized".to_string()))?;
             
         let image = surface.image_snapshot();
-        let data = image.encode_to_data(skia::EncodedImageFormat::PNG)
+        let data = image.encode(None, skia::EncodedImageFormat::PNG, None)
             .ok_or_else(|| crate::WorldFoundryError::Rendering("Failed to encode image".to_string()))?;
             
         Ok(data.as_bytes().to_vec())
     }
     
-    fn render_layer(&self, canvas: &skia::Canvas, world_map: &WorldMap, layer: &LayerConfig, config: &RenderConfig) -> Result<()> {
+    fn render_layer(canvas: &skia::Canvas, world_map: &WorldMap, layer: &LayerConfig, config: &RenderConfig) -> Result<()> {
         match layer.layer_type {
-            LayerType::Heightmap => self.render_heightmap(canvas, world_map, layer, config),
-            LayerType::Water => self.render_water(canvas, world_map, layer, config),
-            LayerType::Biomes => self.render_biomes(canvas, world_map, layer, config),
-            LayerType::Political => self.render_political(canvas, world_map, layer, config),
-            LayerType::Cultural => self.render_cultural(canvas, world_map, layer, config),
-            LayerType::Settlements => self.render_settlements(canvas, world_map, layer, config),
-            LayerType::Rivers => self.render_rivers(canvas, world_map, layer, config),
-            LayerType::Routes => self.render_routes(canvas, world_map, layer, config),
-            LayerType::Markers => self.render_markers(canvas, world_map, layer, config),
-            LayerType::Labels => self.render_labels(canvas, world_map, layer, config),
-            LayerType::Grid => self.render_grid(canvas, world_map, layer, config),
+            LayerType::Heightmap => Self::render_heightmap(canvas, world_map, layer, config),
+            LayerType::Water => Self::render_water(canvas, world_map, layer, config),
+            LayerType::Biomes => Self::render_biomes(canvas, world_map, layer, config),
+            LayerType::Political => Self::render_political(canvas, world_map, layer, config),
+            LayerType::Cultural => Self::render_cultural(canvas, world_map, layer, config),
+            LayerType::Settlements => Self::render_settlements(canvas, world_map, layer, config),
+            LayerType::Rivers => Self::render_rivers(canvas, world_map, layer, config),
+            LayerType::Routes => Self::render_routes(canvas, world_map, layer, config),
+            LayerType::Markers => Self::render_markers(canvas, world_map, layer, config),
+            LayerType::Labels => Self::render_labels(canvas, world_map, layer, config),
+            LayerType::Grid => Self::render_grid(canvas, world_map, layer, config),
         }
     }
     
-    fn render_heightmap(&self, _canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
+    fn render_heightmap(_canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
         // TODO: Implement heightmap rendering
         Ok(())
     }
     
-    fn render_water(&self, _canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
+    fn render_water(_canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
         // TODO: Implement water rendering
         Ok(())
     }
     
-    fn render_biomes(&self, _canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
+    fn render_biomes(_canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
         // TODO: Implement biome rendering
         Ok(())
     }
     
-    fn render_political(&self, _canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
+    fn render_political(_canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
         // TODO: Implement political boundaries rendering
         Ok(())
     }
     
-    fn render_cultural(&self, _canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
+    fn render_cultural(_canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
         // TODO: Implement cultural regions rendering
         Ok(())
     }
     
-    fn render_settlements(&self, _canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
+    fn render_settlements(_canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
         // TODO: Implement settlements rendering
         Ok(())
     }
     
-    fn render_rivers(&self, _canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
+    fn render_rivers(_canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
         // TODO: Implement rivers rendering
         Ok(())
     }
     
-    fn render_routes(&self, _canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
+    fn render_routes(_canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
         // TODO: Implement routes rendering
         Ok(())
     }
     
-    fn render_markers(&self, _canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
+    fn render_markers(_canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
         // TODO: Implement markers rendering
         Ok(())
     }
     
-    fn render_labels(&self, _canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
+    fn render_labels(_canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
         // TODO: Implement labels rendering
         Ok(())
     }
     
-    fn render_grid(&self, _canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
+    fn render_grid(_canvas: &skia::Canvas, _world_map: &WorldMap, _layer: &LayerConfig, _config: &RenderConfig) -> Result<()> {
         // TODO: Implement grid rendering
         Ok(())
     }

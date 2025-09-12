@@ -97,7 +97,6 @@ impl AzgaarImporter {
     
     fn convert_azgaar_to_world_map(&self, azgaar_data: AzgaarJsonData) -> Result<WorldMap> {
         use crate::data::*;
-        use nalgebra::Point2;
         use uuid::Uuid;
         use chrono::Utc;
         
@@ -169,10 +168,10 @@ impl AzgaarImporter {
                 temperature: pack_cells.temp.get(i).copied().unwrap_or(0.0),
                 precipitation: pack_cells.prec.get(i).copied().unwrap_or(0.0),
                 population: pack_cells.pop.get(i).copied().unwrap_or(0),
-                culture: pack_cells.culture.get(i).copied(),
-                state: pack_cells.state.get(i).copied(),
-                province: pack_cells.province.get(i).copied(),
-                religion: pack_cells.religion.get(i).copied(),
+                culture: pack_cells.culture.get(i).and_then(|&x| x),
+                state: pack_cells.state.get(i).and_then(|&x| x),
+                province: pack_cells.province.get(i).and_then(|&x| x),
+                religion: pack_cells.religion.get(i).and_then(|&x| x),
             };
             cells.push(cell);
         }
