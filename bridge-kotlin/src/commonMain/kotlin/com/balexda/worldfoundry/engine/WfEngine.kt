@@ -1,21 +1,29 @@
 package com.balexda.worldfoundry.engine
 
 /**
- * Dummy engine facade for the splash milestone.
- * Later, this will be replaced with FFI calls to the Rust core via a stable C ABI.
+ * World Foundry engine facade that interfaces with the Rust core via C ABI.
+ * Uses expect/actual declarations for platform-specific implementations.
  */
-class WfEngine {
-    fun version(): String = "0.0.0-splash"
+expect class WfEngine() {
+    fun version(): String
+    fun isInitialized(): Boolean
+    fun getEngineInfo(): EngineInfo
     
-    fun isInitialized(): Boolean = true
+    // Context management
+    fun createContext(): WfContext?
+    fun destroyContext(context: WfContext)
     
-    fun getEngineInfo(): EngineInfo {
-        return EngineInfo(
-            version = version(),
-            buildDate = "2025-09-12",
-            features = listOf("splash", "dummy")
-        )
-    }
+    // Project management
+    fun createProject(context: WfContext, filePath: String): WfProject?
+    fun destroyProject(project: WfProject)
+    
+    // Rendering
+    fun createRenderer(project: WfProject): WfRenderer?
+    fun destroyRenderer(renderer: WfRenderer)
+    fun renderTile(renderer: WfRenderer, x: Int, y: Int, zoom: Int): ByteArray?
+    
+    // Export
+    fun exportPng(project: WfProject, outputPath: String, width: Int, height: Int): Boolean
 }
 
 data class EngineInfo(
@@ -23,3 +31,8 @@ data class EngineInfo(
     val buildDate: String,
     val features: List<String>
 )
+
+// Opaque handles for C API objects
+expect class WfContext
+expect class WfProject  
+expect class WfRenderer

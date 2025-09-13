@@ -13,6 +13,12 @@ impl AzgaarImporter {
     pub fn new() -> Self {
         Self
     }
+    
+    /// Import from file path (convenience method for C API)
+    pub fn import_from_file(&self, file_path: &str) -> Result<WorldMap> {
+        let path = Path::new(file_path);
+        self.import(path)
+    }
 }
 
 impl MapImporter for AzgaarImporter {

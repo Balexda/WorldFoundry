@@ -1,5 +1,8 @@
 //! Rendering system for world maps
 
+pub mod tile;
+pub mod color;
+
 use crate::{WorldMap, Result};
 use skia_safe as skia;
 

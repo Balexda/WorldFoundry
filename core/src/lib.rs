@@ -9,6 +9,7 @@ pub mod rendering;
 pub mod import;
 pub mod export;
 pub mod platform;
+pub mod c_api;
 
 pub use data::*;
 pub use generation::*;

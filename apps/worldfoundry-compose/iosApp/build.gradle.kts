@@ -12,7 +12,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":apps:worldfoundry-compose:shared"))
+                implementation(project(":shared"))
             }
         }
     }

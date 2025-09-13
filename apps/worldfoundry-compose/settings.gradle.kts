@@ -24,3 +24,4 @@ rootProject.name = "worldfoundry-compose"
 include(":shared")
 include(":desktopApp")
 include(":iosApp")
+include(":bridge-kotlin")

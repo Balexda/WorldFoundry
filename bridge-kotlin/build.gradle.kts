@@ -3,7 +3,7 @@ plugins {
 }
 
 kotlin {
-    jvm("desktop")
+    jvm()
     
     iosX64()
     iosArm64()
@@ -12,11 +12,11 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                // Common dependencies
+                implementation(libs.kotlinx.coroutines.core)
             }
         }
         
-        val desktopMain by getting {
+        val jvmMain by getting {
             dependencies {
                 // Desktop-specific dependencies for FFI
             }

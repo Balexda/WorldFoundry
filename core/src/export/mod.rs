@@ -1,5 +1,7 @@
 //! Export functionality for various map formats
 
+pub mod png;
+
 use crate::{WorldMap, Result};
 use std::path::Path;
 
